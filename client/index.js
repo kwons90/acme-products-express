@@ -8,8 +8,24 @@ console.time(APP_STARTUP_TIME);
 
 const { API_URL } = process.env;
 
+const Products = (products) => {
+  return (
+    <div className="productContainer">
+      {products.map((product) => {
+        return (
+          <div key={product.id} className="product">
+            <h3>{product.name.toUpperCase()}</h3>
+            <p className="description">{product.description}</p>
+            <p>{`$${product.suggestedPrice.toFixed(2)}`}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 class App extends Component {
-  state = { loaded: false };
+  state = { loaded: false, products: [] };
 
   componentDidMount() {
     fetch(`${API_URL}/api/health`)
@@ -20,11 +36,15 @@ class App extends Component {
       .catch((e) => {
         console.error(`Failed to load initial health check.`, e);
       });
+
+    fetch(`${API_URL}/api/products`)
+      .then((res) => res.json())
+      .then((data) => this.setState({ products: data }));
   }
 
   render() {
-    const { loaded } = this.state;
-
+    const { loaded, products } = this.state;
+    console.log('products', products);
     return (
       <HashRouter>
         <Switch>
@@ -56,6 +76,7 @@ class App extends Component {
               </span>
             </div>
           </Route>
+          <Route path="/products" render={() => Products(products)} />
           <Redirect to="/" />
         </Switch>
       </HashRouter>
