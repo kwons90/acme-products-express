@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
+import {HashRouter, Switch, Route, Redirect } from 'react-router-dom';;
 
 const APP_STARTUP_TIME = 'app_startup_time';
 
