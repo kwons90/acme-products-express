@@ -1,41 +1,28 @@
-const express = require('express');
 const chalk = require('chalk');
-const path = require('path');
+const app = require('./server');
+const { composeMiddleware, standardMiddleware } = require('./middleware');
 const apiRouter = require('./api/index');
 
-const whiteListedUrl = process.env.WHITELISTED_URL || '*';
+// Hooks in all of our standard middleware.
+composeMiddleware(app, standardMiddleware);
 
-const customCORSMiddleware = (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', whiteListedUrl);
-  res.set(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-
-  next();
-};
-
-const app = express();
-
-// Allow parsing of json in req.body
-app.use(express.json());
-// Allow cors requests - configured slightly with env variables
-app.use(customCORSMiddleware);
-// Statically serve webpacks built files
-app.use(express.static(path.join(__dirname, '../../dist')));
-// Include an express router to extend upon
+// Hooks in a router for the /api route.
 app.use('/api', apiRouter);
 
-const startServer = (port, prod) =>
-  new Promise((res) => {
+// TODO: You could write anything between here and start server.
+
+// Promisifying starting the server - doesn't matter yet, but will when we get to databases so better to get used to.
+const startServer = (port, prod = false) => {
+  console.log(
+    `Application is running in ${prod ? 'production' : 'development'} mode.`
+  );
+
+  return new Promise((res) => {
     app.listen(port, () => {
-      console.log(
-        chalk.green(
-          `Application is now listening on PORT:${port} and allowing the following sites to communicate with us: ${whiteListedUrl}`
-        )
-      );
+      console.log(chalk.green(`Application is now listening on PORT:${port}`));
       res();
     });
   });
+};
 
 module.exports = startServer;

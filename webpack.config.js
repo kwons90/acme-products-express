@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { EnvironmentPlugin } = require('webpack');
 
+dotenv.config();
+
 const API_URL = process.env.API_URL || 'http://localhost';
 const PORT = process.env.PORT || 3000;
 
