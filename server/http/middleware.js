@@ -6,7 +6,7 @@ const whiteListedUrl = process.env.WHITELISTED_URL || '*';
 
 // Allow CORS - this enables us to let other client applications not served from the same port communicate with us. This can be configured.
 const customCORSMiddleware = (req, res, next) => {
-  res.set('Access-Control-Allow-Origin', whiteListedUrl);
+  res.set('Access-Control-Allow-Origin', '*');
   res.set(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
